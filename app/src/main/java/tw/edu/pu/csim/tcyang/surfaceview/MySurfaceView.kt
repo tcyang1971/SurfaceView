@@ -15,7 +15,13 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     lateinit var surfaceHolder: SurfaceHolder
     lateinit var BG: Bitmap
     lateinit var SuperMan:Bitmap
+
     var BGmoveX:Int = 0
+
+    var xPos:Int = 0
+    var yPos:Int = 0
+    var deltaX:Int = 5
+    var deltaY:Int = 5
 
     init {
         surfaceHolder = getHolder()
@@ -54,11 +60,22 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
             canvas.drawBitmap(BG, BGnewX.toFloat(), 0f, null)
         }
 
+        //超人反彈
         var SrcRect: Rect = Rect(0, 0, SuperMan.width, SuperMan.height) //裁切
         var w:Int = SuperMan.width / 6
         var h:Int = SuperMan.height / 6
-        var DestRect:Rect = Rect(0, 0, w, h)
-        canvas.drawBitmap(SuperMan, SrcRect, DestRect, null);
+
+        xPos += deltaX
+        yPos += deltaY
+        if (xPos >= getWidth()-w || xPos<=0){
+            deltaX*=-1
+        }
+        if (yPos >= getHeight()-h || yPos<=0){
+            deltaY*=-1
+        }
+
+        var DestRect:Rect = Rect(xPos, yPos, xPos + w, yPos + h)
+        canvas.drawBitmap(SuperMan, SrcRect, DestRect, null)
     }
 
 }
