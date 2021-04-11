@@ -1,5 +1,6 @@
 package tw.edu.pu.csim.tcyang.surfaceview
 
+import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -20,9 +21,12 @@ class MainActivity : AppCompatActivity() {
         // Initialize the handler instance
         myHandler = Handler(Looper.getMainLooper())
         myRunnable = Runnable {
-            count++;
+            count++
             txv.text = count.toString()
-            myHandler.postDelayed(myRunnable, 1000)
+            val canvas: Canvas = mysv.holder.lockCanvas()
+              mysv.drawSomething(canvas)
+            mysv.holder.unlockCanvasAndPost(canvas)
+            myHandler.postDelayed(myRunnable, 30)
         }
 
         // Set a click listener for run button

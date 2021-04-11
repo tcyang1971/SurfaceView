@@ -15,6 +15,7 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     lateinit var surfaceHolder: SurfaceHolder
     lateinit var BG: Bitmap
     lateinit var SuperMan:Bitmap
+    var BGmoveX:Int = 0
 
     init {
         surfaceHolder = getHolder()
@@ -24,7 +25,7 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
-        var canvas: Canvas = surfaceHolder.lockCanvas(null)
+        var canvas: Canvas = surfaceHolder.lockCanvas()
             drawSomething(canvas)
         surfaceHolder.unlockCanvasAndPost(canvas)
     }
@@ -38,7 +39,21 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     }
 
     fun drawSomething(canvas:Canvas) {
-        canvas.drawBitmap(BG, 0f, 0f, null);
+        //canvas.drawBitmap(BG, 0f, 0f, null)
+        //背景捲動
+        BGmoveX --
+        var BGnewX:Int = BG.width + BGmoveX
+        // 如果已捲動整張圖，則重新開始
+        if (BGnewX <= 0) {
+            BGmoveX = 0
+            // only need one draw
+            canvas.drawBitmap(BG, BGmoveX.toFloat(), 0f, null)
+        } else {
+            // need to draw original and wrap
+            canvas.drawBitmap(BG, BGmoveX.toFloat(), 0f, null)
+            canvas.drawBitmap(BG, BGnewX.toFloat(), 0f, null)
+        }
+
         var SrcRect: Rect = Rect(0, 0, SuperMan.width, SuperMan.height) //裁切
         var w:Int = SuperMan.width / 6
         var h:Int = SuperMan.height / 6
